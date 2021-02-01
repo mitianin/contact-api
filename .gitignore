@@ -1,0 +1,6 @@
+/.idea
+/src/test
+/target
+*.iml
+*.txt
+*.DS_Store
