@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.Locale;
 
 @AllArgsConstructor
-public class GetAllWithAuthorization implements ActionWithToken{
+public class GetAllWithAuthorization implements Action {
     private final UserService userService;
 
 
@@ -17,6 +17,10 @@ public class GetAllWithAuthorization implements ActionWithToken{
 
         if (!new File("token.txt").exists() || token == null) return "No token to log in";
         return userService.getAllWithLogin(token).toString();
+    }
+    @Override
+    public boolean needToken() {
+        return true;
     }
 
     @Override

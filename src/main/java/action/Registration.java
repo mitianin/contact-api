@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 @AllArgsConstructor
 
-public class Registration implements ActionWithNoToken {
+public class Registration implements Action {
 
     private final UserService userService;
     private final Scanner s;

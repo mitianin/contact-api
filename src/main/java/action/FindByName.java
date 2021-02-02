@@ -6,7 +6,7 @@ import service.UserService;
 import java.util.Scanner;
 
 @Data
-public class FindByName implements ActionWithToken{
+public class FindByName implements Action {
     private final UserService userService;
     private final Scanner s;
 
@@ -17,7 +17,12 @@ public class FindByName implements ActionWithToken{
     }
 
     @Override
+    public boolean needToken() {
+        return true;
+    }
+
+    @Override
     public String toString() {
-        return "FIND USER BY NAME";
+        return "FIND CONTACT BY NAME";
     }
 }

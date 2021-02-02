@@ -20,8 +20,9 @@ import java.util.stream.Collectors;
 public class UserService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final String tokenFile;
 
+    private String token;
+    private Date tokenDate;
     private String baseUri = "https://mag-contacts-api.herokuapp.com";
 
 
@@ -61,8 +62,10 @@ public class UserService {
 
             LoginResponse loginResponse = objectMapper.readValue(response.body(), LoginResponse.class);
 
-            if (loginResponse.getToken() != null) writeToFile(loginResponse.getToken());
-
+            if (loginResponse.getToken() != null) {
+              token = loginResponse.getToken();
+              tokenDate = new Date();
+            }
             return loginResponse;
 
 
@@ -133,7 +136,7 @@ public class UserService {
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             FindResponse findResponse = objectMapper.readValue(response.body(), FindResponse.class);
 
-            return  findResponse.getContacts();
+            return findResponse.getContacts();
 
         } catch (URISyntaxException | InterruptedException | IOException e) {
             e.printStackTrace();
@@ -201,27 +204,8 @@ public class UserService {
     }
 
     public String getToken(){
-        String token = null;
-
         if (!checkTokenTime()) return null;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(tokenFile))){
-            token = String.valueOf(br.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return token;
-    }
-
-
-    private void writeToFile(String token){
-
-        try (FileWriter fw = new FileWriter(tokenFile)){
-            fw.write(token);
-            fw.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private HttpRequest createPostRequestWithToken(String path, String data, String token) throws URISyntaxException {
@@ -236,7 +220,8 @@ public class UserService {
     }
 
     private boolean checkTokenTime(){
-        return new Date().getTime() - new File(tokenFile).lastModified() <= 600000;
+        if (tokenDate == null) return false;
+        return new Date().getTime() - tokenDate.getTime() <= 600000;
     }
 
 

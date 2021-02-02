@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 @Data
 @AllArgsConstructor
-public class Login implements ActionWithNoToken {
+public class Login implements Action {
     private final UserService userService;
     private final Scanner s;
 

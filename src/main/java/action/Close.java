@@ -1,6 +1,6 @@
 package action;
 
-public class Close implements ActionWithToken, ActionWithNoToken {
+public class Close implements Action {
     @Override
     public String doIt() {
         return "Close action";

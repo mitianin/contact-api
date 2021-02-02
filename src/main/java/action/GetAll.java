@@ -6,7 +6,7 @@ import service.UserService;
 import java.util.Locale;
 
 @AllArgsConstructor
-public class GetAll implements ActionWithNoToken {
+public class GetAll implements Action {
     private final UserService userService;
 
     public String doIt(){
