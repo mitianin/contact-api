@@ -1,9 +1,9 @@
-package action;
+package com.company.action;
 
 public class Close implements Action {
     @Override
     public String doIt() {
-        return "Close action";
+        return "Close com.company.action";
     }
 
     @Override

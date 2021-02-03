@@ -1,4 +1,6 @@
-import action.Action;
+package com.company;
+
+import com.company.action.*;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -42,5 +44,6 @@ public class Menu {
            System.out.println("Invalid index. Valid index is from 1 to " + list.size());
        else System.out.println(list.get(optionIndex - 1).doIt());
    }
+
 
 }

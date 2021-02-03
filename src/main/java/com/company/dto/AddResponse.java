@@ -1,4 +1,5 @@
-package dto;
+package com.company.dto;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -6,12 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FindContact{
-    private String name;
-    private String value;
-    private String type;
-    private String id;
+public class AddResponse {
+    String status;
 }

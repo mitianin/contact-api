@@ -1,15 +1,15 @@
-package action;
+package com.company.action;
 
 import lombok.Data;
-import service.UserService;
+import com.company.service.ContactService;
 
 @Data
 public class FindAllContact implements Action {
-    private final UserService userService;
+    private final ContactService contactService;
 
     @Override
     public String doIt() {
-        return userService.findAllContacts(userService.getToken()).toString();
+        return contactService.findAllContacts(contactService.getToken()).toString();
     }
 
     @Override

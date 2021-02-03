@@ -1,7 +1,7 @@
-package action;
+package com.company.action;
 
 import lombok.AllArgsConstructor;
-import service.UserService;
+import com.company.service.UserService;
 
 import java.io.File;
 import java.util.Locale;
@@ -15,7 +15,7 @@ public class GetAllWithAuthorization implements Action {
     public String doIt() {
         String token = userService.getToken();
 
-        if (!new File("token.txt").exists() || token == null) return "No token to log in";
+        if (token == null) return "No token to log in";
         return userService.getAllWithLogin(token).toString();
     }
     @Override

@@ -1,7 +1,7 @@
-package action;
+package com.company.action;
 
 import lombok.AllArgsConstructor;
-import service.UserService;
+import com.company.service.UserService;
 
 import java.util.Locale;
 

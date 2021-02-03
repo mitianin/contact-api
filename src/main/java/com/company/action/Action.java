@@ -1,4 +1,4 @@
-package action;
+package com.company.action;
 
 public interface Action {
     String doIt();

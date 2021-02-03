@@ -1,13 +1,12 @@
-package dto;
+package com.company.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class RegisterResponse {
+public class LoginResponse {
     private String status;
     private String error;
+    private String token;
 }
