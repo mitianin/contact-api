@@ -19,10 +19,10 @@ import java.util.List;
 public class UserService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final String baseUri;
 
-    private String token;
-    private Date tokenDate;
-    private String baseUri = "https://mag-contacts-api.herokuapp.com";
+    private static String token;
+    private static Date tokenDate;
 
 
     public List<User> getAll(){
@@ -75,22 +75,6 @@ public class UserService {
         return null;
     }
 
-    public AddResponse add(String type, String value, String name, String token){
-        AddResponse addResponse = null;
-        try {
-            String addData = objectMapper.writeValueAsString(new AddRequest(type, value, name));
-            HttpRequest httpRequest = createPostRequestWithToken("/contacts/add", addData, token);
-
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            addResponse = objectMapper.readValue(response.body(), AddResponse.class);
-
-        } catch (URISyntaxException | InterruptedException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return addResponse;
-    }
-
     public List<User> getAllWithLogin(String token){
         UserResponse userResponse = null;
         try {
@@ -135,27 +119,8 @@ public class UserService {
     }
 
     public String getToken(){
-        if (!checkTokenTime()) return null;
+        if (tokenDate == null || new Date().getTime() - tokenDate.getTime() > 600000) return null;
         return token;
     }
-
-    private HttpRequest createPostRequestWithToken(String path, String data, String token) throws URISyntaxException {
-        return HttpRequest.newBuilder().
-                uri(new URI(baseUri + path))
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + token)
-                .POST(HttpRequest.BodyPublishers.ofString(data))
-                .build();
-
-    }
-
-    private boolean checkTokenTime(){
-        if (tokenDate == null) return false;
-        return new Date().getTime() - tokenDate.getTime() <= 600000;
-    }
-
-
-
 
 }

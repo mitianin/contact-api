@@ -3,7 +3,6 @@ package com.company.action;
 import lombok.AllArgsConstructor;
 import com.company.service.UserService;
 
-import java.io.File;
 import java.util.Locale;
 
 @AllArgsConstructor

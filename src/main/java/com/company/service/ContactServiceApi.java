@@ -1,5 +1,7 @@
 package com.company.service;
 
+import com.company.dto.AddRequest;
+import com.company.dto.AddResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.company.dto.FindContact;
 import com.company.dto.FindResponse;
@@ -15,19 +17,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ContactService {
+public class ContactServiceApi implements Service{
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final UserService userService;
 
-    private String baseUri = "https://mag-contacts-api.herokuapp.com";
-
+    @Override
     public List<FindContact> findAllContacts(String token){
 
         try {
 
             HttpRequest httpRequest = HttpRequest.newBuilder().
-                    uri(new URI(baseUri + "/contacts"))
+                    uri(new URI(userService.getBaseUri() + "/contacts"))
                     .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + token)
@@ -45,6 +46,7 @@ public class ContactService {
         return null;
     }
 
+    @Override
     public List<FindContact> findByName(String name, String token){
 
         try {
@@ -68,6 +70,7 @@ public class ContactService {
         return null;
     }
 
+    @Override
     public List<FindContact> findByValue(String value, String token){
 
         try {
@@ -90,18 +93,33 @@ public class ContactService {
         return null;
     }
 
+     public boolean add(String type, String value, String name, String token){
+        AddResponse addResponse = null;
+        try {
+            String addData = objectMapper.writeValueAsString(new AddRequest(type, value, name));
+            HttpRequest httpRequest = createPostRequestWithToken("/contacts/add", addData, token);
+
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            addResponse = objectMapper.readValue(response.body(), AddResponse.class);
+
+        } catch (URISyntaxException | InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
     public String getToken(){
         return userService.getToken();
     }
 
     private HttpRequest createPostRequestWithToken(String path, String data, String token) throws URISyntaxException {
         return HttpRequest.newBuilder().
-                uri(new URI(baseUri + path))
+                uri(new URI(userService.getBaseUri() + path))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .build();
-
     }
 }
