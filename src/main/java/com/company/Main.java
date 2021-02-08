@@ -2,54 +2,24 @@ package com.company;
 
 import com.company.action.*;
 import com.company.service.*;
+import com.company.util.CreateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.http.HttpClient;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        InputStream in =
-                Main.class.getClassLoader().getResourceAsStream("jar-prop.properties");
-        Properties prop = System.getProperties();
-
         HttpClient httpClient = HttpClient.newBuilder().build();
         ObjectMapper objectMapper = new ObjectMapper();
-        UserService userService = null;
-        Service contactService = null;
 
-        if (prop.getProperty("contactbook.profile") != null) {
-            try {
-                prop.load(in);
-                userService = new UserService(httpClient,
-                        objectMapper, prop.getProperty("base-url"));
+        CreateService createService = new CreateService(httpClient, objectMapper);
 
-                switch (prop.getProperty("contactbook.profile")) {
-                    case "prod":
-                        contactService = new ContactServiceApi(httpClient, objectMapper, userService);
-                        break;
-                    case "dev":
-                        contactService = new ContactServiceFile(userService,
-                                objectMapper, prop.getProperty("file-path"));
-                        break;
-                    case "memory":
-                        contactService = new ContactServiceMemory(userService);
-                        break;
-                    default:
-                        System.out.println("WRONG VM OPTION");
-                        return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("NO CONTACTBOOK.PROFILE OPTION");
-            return;
-        }
+        UserService userService = new UserService(httpClient, objectMapper, createService.getBaseUrl());
+        Service contactService = createService.createService(userService);
+
+
 
         Scanner s = new Scanner(System.in);
         Menu menu = new Menu();
