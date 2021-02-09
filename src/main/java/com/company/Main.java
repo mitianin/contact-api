@@ -1,9 +1,12 @@
 package com.company;
 
 import com.company.action.*;
+import com.company.config.AppConfig;
+import com.company.config.PropertiesLoader;
 import com.company.service.*;
-import com.company.util.CreateService;
+import com.company.util.CreateService2;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.http.HttpClient;
 import java.util.Scanner;
 
@@ -11,15 +14,14 @@ public class Main {
 
     public static void main(String[] args) {
 
+        PropertiesLoader loader = new PropertiesLoader();
+        AppConfig appConfig = loader.getFileProps(AppConfig.class);
         HttpClient httpClient = HttpClient.newBuilder().build();
         ObjectMapper objectMapper = new ObjectMapper();
+        UserService userService = new UserService(httpClient, objectMapper, appConfig.getBaseURL());
 
-        CreateService createService = new CreateService(httpClient, objectMapper);
-
-        UserService userService = new UserService(httpClient, objectMapper, createService.getBaseUrl());
-        Service contactService = createService.createService(userService);
-
-
+        CreateService2 createService2 = new CreateService2(httpClient, objectMapper, appConfig);
+        Service contactService = createService2.create(userService);
 
         Scanner s = new Scanner(System.in);
         Menu menu = new Menu();

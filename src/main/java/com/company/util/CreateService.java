@@ -1,6 +1,6 @@
 package com.company.util;
 
-import com.company.exeptions.NoConfigFileException;
+import com.company.exceptions.NoConfigFileException;
 import com.company.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
