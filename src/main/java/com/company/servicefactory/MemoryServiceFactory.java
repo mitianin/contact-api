@@ -1,5 +1,6 @@
 package com.company.servicefactory;
 
+import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceMemory;
 import com.company.service.UserService;
@@ -15,6 +16,7 @@ public class MemoryServiceFactory implements ServiceFactory {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
+    private final HttpFactory httpFactory;
 
     @Override
     public ContactService createContactService() {
@@ -23,6 +25,6 @@ public class MemoryServiceFactory implements ServiceFactory {
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(httpClient, objectMapper, baseUri);
+        return new UserServiceApi(httpClient, objectMapper, baseUri, httpFactory);
     }
 }

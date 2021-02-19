@@ -1,5 +1,6 @@
 package com.company.servicefactory;
 
+import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceFile;
 import com.company.service.UserService;
@@ -15,7 +16,7 @@ public class FileServiceFactory implements ServiceFactory{
     private final ObjectMapper objectMapper;
     private final String baseUri;
     private final String filePath;
-    //private final UserService userService;
+    private final HttpFactory httpFactory;
 
     @Override
     public ContactService createContactService() {
@@ -24,6 +25,6 @@ public class FileServiceFactory implements ServiceFactory{
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(httpClient, objectMapper, baseUri);
+        return new UserServiceApi(httpClient, objectMapper, baseUri, httpFactory);
     }
 }

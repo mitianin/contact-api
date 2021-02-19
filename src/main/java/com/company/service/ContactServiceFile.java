@@ -2,6 +2,7 @@ package com.company.service;
 
 import com.company.dto.AddResponse;
 import com.company.dto.FindContact;
+import com.company.httpfactory.HttpFactory;
 import com.company.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -15,7 +16,6 @@ import java.util.stream.Collectors;
 @Data
 @RequiredArgsConstructor
 public class ContactServiceFile implements ContactService {
-    //private final UserService userService;
     private final ObjectMapper objectMapper;
     private final String filePath;
 

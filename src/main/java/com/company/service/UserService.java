@@ -11,7 +11,4 @@ public interface UserService {
     LoginResponse login(String login, String password);
     List<User> getAllWithLogin(String token);
     RegisterResponse register(String login, String password, String dateBorn);
-    default String getBaseUri(){
-        return "https://mag-contacts-api.herokuapp.com";
-    }
 }

@@ -1,5 +1,6 @@
 package com.company.servicefactory;
 
+import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceApi;
 import com.company.service.UserService;
@@ -14,15 +15,15 @@ public class ApiServiceFactory implements ServiceFactory{
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
-    //private final UserService userService;
+    private final HttpFactory httpFactory;
 
     @Override
     public ContactService createContactService() {
-        return new ContactServiceApi(httpClient, objectMapper, baseUri);
+        return new ContactServiceApi(httpClient, objectMapper, baseUri, httpFactory);
     }
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(httpClient, objectMapper, baseUri);
+        return new UserServiceApi(httpClient, objectMapper, baseUri, httpFactory);
     }
 }

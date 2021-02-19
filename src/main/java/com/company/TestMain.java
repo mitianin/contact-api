@@ -6,6 +6,8 @@ import com.company.action.*;
 import com.company.action.Registration;
 import com.company.config.AppConfig;
 import com.company.config.PropertiesLoader;
+import com.company.httpfactory.HttpFactory;
+import com.company.httpfactory.HttpJsonRequestFactory;
 import com.company.service.ContactService;
 import com.company.service.UserService;
 import com.company.servicefactory.ApiServiceFactory;
@@ -26,19 +28,21 @@ public class TestMain {
 
         HttpClient httpClient = HttpClient.newBuilder().build();
         ObjectMapper objectMapper = new ObjectMapper();
+        HttpFactory httpFactory = new HttpJsonRequestFactory();
 
         ServiceFactory factory;
 
         switch (config.getWorkmode()) {
             case "api": {
-                factory = new ApiServiceFactory(httpClient, objectMapper, config.getBaseURL());
+                factory = new ApiServiceFactory(httpClient, objectMapper, config.getBaseURL(), httpFactory);
                 break;
             }
             case "file": {
-                factory = new FileServiceFactory(httpClient, objectMapper, config.getBaseURL(), config.getFilePath());
+                factory = new FileServiceFactory(httpClient, objectMapper,
+                        config.getBaseURL(), config.getFilePath(), httpFactory);
                 break;
             }
-            default: factory = new MemoryServiceFactory(httpClient, objectMapper, config.getBaseURL());
+            default: factory = new MemoryServiceFactory(httpClient, objectMapper, config.getBaseURL(), httpFactory);
         }
 
         UserService us = factory.createUserService();

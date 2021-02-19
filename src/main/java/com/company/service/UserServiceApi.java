@@ -1,5 +1,6 @@
 package com.company.service;
 
+import com.company.httpfactory.HttpFactory;
 import com.company.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.company.dto.*;
@@ -7,8 +8,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -21,20 +20,18 @@ public class UserServiceApi implements UserService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
+    private final HttpFactory httpFactory;
 
     @Override
     public List<User> getAll() {
         UserResponse userResponse = null;
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder().
-                    uri(new URI(baseUri + "/users"))
-                    .header("Accept", "application/json")
-                    .GET()
-                    .build();
+
+            HttpRequest httpRequest = httpFactory.getRequestWithNoToken(baseUri+"/users");
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             userResponse = objectMapper.readValue(response.body(), UserResponse.class);
 
-        } catch (URISyntaxException | IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -47,14 +44,7 @@ public class UserServiceApi implements UserService {
 
         try {
             String logData = objectMapper.writeValueAsString(new LoginRequest(login, password));
-
-            HttpRequest httpRequest =
-                    HttpRequest.newBuilder().
-                            uri(new URI(baseUri + "/login"))
-                            .header("Accept", "application/json")
-                            .header("Content-Type", "application/json")
-                            .POST(HttpRequest.BodyPublishers.ofString(logData))
-                            .build();
+            HttpRequest httpRequest = httpFactory.postRequestWithNoToken(baseUri+"/login", logData);
 
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
@@ -67,7 +57,7 @@ public class UserServiceApi implements UserService {
             return loginResponse;
 
 
-        } catch (URISyntaxException | IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -78,17 +68,11 @@ public class UserServiceApi implements UserService {
     public List<User> getAllWithLogin(String token) {
         UserResponse userResponse = null;
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder().
-                    uri(new URI(baseUri + "/users2"))
-                    .header("Accept", "application/json")
-                    .header("Authorization", "Bearer " + token)
-                    .GET()
-                    .build();
-
+            HttpRequest httpRequest = httpFactory.getRequestWithToken(baseUri+"/users2");
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             userResponse = objectMapper.readValue(response.body(), UserResponse.class);
 
-        } catch (URISyntaxException | IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -101,18 +85,12 @@ public class UserServiceApi implements UserService {
         RegisterResponse registerResponse = null;
         try {
             String regData = objectMapper.writeValueAsString(new RegisterRequest(login, password, dateBorn));
-            HttpRequest httpRequest =
-                    HttpRequest.newBuilder().
-                            uri(new URI(baseUri + "/register"))
-                            .header("Accept", "application/json")
-                            .header("Content-Type", "application/json")
-                            .POST(HttpRequest.BodyPublishers.ofString(regData))
-                            .build();
+            HttpRequest httpRequest = httpFactory.postRequestWithNoToken(baseUri+"/register", regData);
 
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             registerResponse = objectMapper.readValue(response.body(), RegisterResponse.class);
 
-        } catch (URISyntaxException | InterruptedException | IOException e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
 

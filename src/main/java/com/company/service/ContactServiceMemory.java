@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Data
 @RequiredArgsConstructor
 public class ContactServiceMemory implements ContactService {
-    //private final UserServiceApi userService;
 
     @Override
     public List<FindContact> findAllContacts(String token) {
