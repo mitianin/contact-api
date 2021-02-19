@@ -1,13 +1,14 @@
 package com.company.action;
 
-import com.company.service.Service;
+import com.company.service.ContactService;
+import com.company.util.Token;
 import lombok.AllArgsConstructor;
 
 import java.util.Scanner;
 
 @AllArgsConstructor
 public class Add implements Action {
-    private final Service service;
+    private final ContactService contactService;
     private final Scanner s;
 
     @Override
@@ -18,7 +19,7 @@ public class Add implements Action {
         String value = s.nextLine();
         String name = s.nextLine();
 
-        return String.valueOf(service.add(type, value, name, service.getToken()));
+        return String.valueOf(contactService.add(type, value, name, Token.getToken()));
     }
     @Override
     public boolean needToken() {

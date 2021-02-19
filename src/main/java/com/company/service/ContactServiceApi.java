@@ -17,18 +17,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ContactServiceApi implements Service{
+public class ContactServiceApi implements ContactService {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
+    private final String baseUrl;
 
     @Override
     public List<FindContact> findAllContacts(String token){
-
         try {
 
             HttpRequest httpRequest = HttpRequest.newBuilder().
-                    uri(new URI(userService.getBaseUri() + "/contacts"))
+                    uri(new URI(baseUrl + "/contacts"))
                     .header("Accept", "application/json")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + token)
@@ -109,13 +108,9 @@ public class ContactServiceApi implements Service{
         return true;
     }
 
-    public String getToken(){
-        return userService.getToken();
-    }
-
     private HttpRequest createPostRequestWithToken(String path, String data, String token) throws URISyntaxException {
         return HttpRequest.newBuilder().
-                uri(new URI(userService.getBaseUri() + path))
+                uri(new URI(baseUrl + path))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
                 .header("Authorization", "Bearer " + token)

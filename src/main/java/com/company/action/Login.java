@@ -1,8 +1,9 @@
 package com.company.action;
 
+import com.company.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import com.company.service.UserService;
+import com.company.service.UserServiceApi;
 
 import java.util.Scanner;
 

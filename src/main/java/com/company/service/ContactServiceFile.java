@@ -2,6 +2,7 @@ package com.company.service;
 
 import com.company.dto.AddResponse;
 import com.company.dto.FindContact;
+import com.company.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,8 @@ import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
-public class ContactServiceFile implements Service{
-    private final UserService userService;
+public class ContactServiceFile implements ContactService {
+    //private final UserService userService;
     private final ObjectMapper objectMapper;
     private final String filePath;
 
@@ -73,13 +74,8 @@ public class ContactServiceFile implements Service{
         return false;
     }
 
-    @Override
-    public String getToken() {
-        return userService.getToken();
-    }
-
     private int setId() {
-        return findAllContacts(userService.getToken()).
+        return findAllContacts(Token.getToken()).
                 stream().
                 mapToInt(x -> Integer.parseInt(x.getId())).
                 max().

@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 @Data
 @RequiredArgsConstructor
-public class ContactServiceMemory implements Service{
-    private final UserService userService;
+public class ContactServiceMemory implements ContactService {
+    //private final UserServiceApi userService;
 
     @Override
     public List<FindContact> findAllContacts(String token) {
@@ -40,10 +40,5 @@ public class ContactServiceMemory implements Service{
         ContactsMemory.memoryContacts.add(new FindContact(name, value, type, Integer.toString(++ContactsMemory.id)));
 
         return true;
-    }
-
-    @Override
-    public String getToken() {
-        return userService.getToken();
     }
 }

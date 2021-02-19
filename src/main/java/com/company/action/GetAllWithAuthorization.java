@@ -1,7 +1,9 @@
 package com.company.action;
 
-import lombok.AllArgsConstructor;
 import com.company.service.UserService;
+import com.company.util.Token;
+import lombok.AllArgsConstructor;
+import com.company.service.UserServiceApi;
 
 import java.util.Locale;
 
@@ -12,7 +14,7 @@ public class GetAllWithAuthorization implements Action {
 
     @Override
     public String doIt() {
-        String token = userService.getToken();
+        String token = Token.getToken();
 
         if (token == null) return "No token to log in";
         return userService.getAllWithLogin(token).toString();
