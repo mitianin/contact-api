@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserResponse {
+public class UserResponse implements Response {
     private String status;
     private List<User> users;
     private String error;

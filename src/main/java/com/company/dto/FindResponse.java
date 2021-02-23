@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FindResponse {
+public class FindResponse implements Response {
     private List<FindContact> contacts;
     private String status;
 

@@ -1,5 +1,6 @@
 package com.company.servicefactory;
 
+import com.company.httpfacade.HttpJsonFacade;
 import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceApi;
@@ -11,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.net.http.HttpClient;
 
 @RequiredArgsConstructor
-public class ApiServiceFactory implements ServiceFactory{
+public class ApiServiceFactory implements ServiceFactory {
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
@@ -24,6 +25,6 @@ public class ApiServiceFactory implements ServiceFactory{
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(httpClient, objectMapper, baseUri, httpFactory);
+        return new UserServiceApi(objectMapper, baseUri, new HttpJsonFacade(httpFactory, objectMapper, httpClient));
     }
 }

@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LoginResponse {
+public class LoginResponse implements Response {
     private String status;
     private String error;
     private String token;

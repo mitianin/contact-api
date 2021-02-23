@@ -1,7 +1,9 @@
 package com.company.service;
 
+import com.company.httpfacade.HttpFacade;
 import com.company.httpfactory.HttpFactory;
 import com.company.util.Token;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.company.dto.*;
 import lombok.Data;
@@ -17,23 +19,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @Data
 public class UserServiceApi implements UserService {
-    private final HttpClient httpClient;
+    //private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
-    private final HttpFactory httpFactory;
+    //private final HttpFactory httpFactory;
+    private final HttpFacade facade;
 
     @Override
     public List<User> getAll() {
-        UserResponse userResponse = null;
-        try {
 
-            HttpRequest httpRequest = httpFactory.getRequestWithNoToken(baseUri+"/users");
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            userResponse = objectMapper.readValue(response.body(), UserResponse.class);
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        UserResponse userResponse = (UserResponse) facade.get(baseUri + "/users", UserResponse.class);
 
         if (userResponse != null) return userResponse.getUsers();
         else return null;
@@ -44,20 +39,15 @@ public class UserServiceApi implements UserService {
 
         try {
             String logData = objectMapper.writeValueAsString(new LoginRequest(login, password));
-            HttpRequest httpRequest = httpFactory.postRequestWithNoToken(baseUri+"/login", logData);
-
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            LoginResponse loginResponse = objectMapper.readValue(response.body(), LoginResponse.class);
+            LoginResponse loginResponse =
+                    (LoginResponse) facade.post(baseUri + "/login", logData, LoginResponse.class);
 
             if (loginResponse.getToken() != null) {
                 Token.token = loginResponse.getToken();
                 Token.tokenDate = new Date();
             }
             return loginResponse;
-
-
-        } catch (IOException | InterruptedException e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
@@ -66,34 +56,22 @@ public class UserServiceApi implements UserService {
 
     @Override
     public List<User> getAllWithLogin(String token) {
-        UserResponse userResponse = null;
-        try {
-            HttpRequest httpRequest = httpFactory.getRequestWithToken(baseUri+"/users2");
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            userResponse = objectMapper.readValue(response.body(), UserResponse.class);
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        UserResponse userResponse = (UserResponse) facade.getAuthorized(baseUri + "/users2", UserResponse.class);
         if (userResponse != null) return userResponse.getUsers();
         else return null;
     }
 
     @Override
     public RegisterResponse register(String login, String password, String dateBorn) {
-        RegisterResponse registerResponse = null;
         try {
             String regData = objectMapper.writeValueAsString(new RegisterRequest(login, password, dateBorn));
-            HttpRequest httpRequest = httpFactory.postRequestWithNoToken(baseUri+"/register", regData);
-
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            registerResponse = objectMapper.readValue(response.body(), RegisterResponse.class);
-
-        } catch (InterruptedException | IOException e) {
+            RegisterResponse registerResponse =
+                    (RegisterResponse) facade.postAuthorized(baseUri + "/register", regData, RegisterResponse.class);
+            return registerResponse;
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        return registerResponse;
+        return null;
     }
 }

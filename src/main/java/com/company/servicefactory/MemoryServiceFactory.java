@@ -1,5 +1,7 @@
 package com.company.servicefactory;
 
+import com.company.dto.UserResponse;
+import com.company.httpfacade.HttpJsonFacade;
 import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceMemory;
@@ -25,6 +27,6 @@ public class MemoryServiceFactory implements ServiceFactory {
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(httpClient, objectMapper, baseUri, httpFactory);
+        return new UserServiceApi(objectMapper, baseUri, new HttpJsonFacade(httpFactory, objectMapper, httpClient));
     }
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterResponse {
+public class RegisterResponse implements Response {
     private String status;
     private String error;
 }
