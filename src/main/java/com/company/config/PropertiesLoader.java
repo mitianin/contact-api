@@ -3,6 +3,7 @@ package com.company.config;
 import com.company.annotation.MyConfigAnnotation;
 import com.company.exceptions.NoConfigFileException;
 import com.company.exceptions.NoDefaultConstructorException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -57,28 +58,4 @@ public class PropertiesLoader {
         }
         return file;
     }
-
-
-//    public void setFileProps(Object o) {
-//        Properties prop = new Properties();
-//        try {
-//            prop.load(new FileInputStream(getConfigFile()));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Class clazz = o.getClass();
-//        for (Field field : clazz.getDeclaredFields()) {
-//            if (field.isAnnotationPresent(MyConfigAnnotation.class)) {
-//                MyConfigAnnotation an = field.getAnnotation(MyConfigAnnotation.class);
-//                String value = prop.getProperty(an.value());
-//
-//                field.setAccessible(true);
-//                try {
-//                    field.set(o, value);
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
 }

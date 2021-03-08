@@ -6,14 +6,15 @@ import com.company.action.*;
 import com.company.action.Registration;
 import com.company.config.AppConfig;
 import com.company.config.PropertiesLoader;
+import com.company.service.ContactServiceDb;
+import com.company.service.UserServiceDb;
+import com.company.servicefactory.*;
+import com.company.util.HttpJsonFacade;
 import com.company.httpfactory.HttpFactory;
 import com.company.httpfactory.HttpJsonRequestFactory;
 import com.company.service.ContactService;
 import com.company.service.UserService;
-import com.company.servicefactory.ApiServiceFactory;
-import com.company.servicefactory.FileServiceFactory;
-import com.company.servicefactory.MemoryServiceFactory;
-import com.company.servicefactory.ServiceFactory;
+import com.company.util.MyDataBase;
 import com.company.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,20 +30,30 @@ public class TestMain {
         HttpClient httpClient = HttpClient.newBuilder().build();
         ObjectMapper objectMapper = new ObjectMapper();
         HttpFactory httpFactory = new HttpJsonRequestFactory();
+        HttpJsonFacade httpJsonFacade = new HttpJsonFacade(httpFactory, objectMapper, httpClient);
 
         ServiceFactory factory;
 
         switch (config.getWorkmode()) {
             case "api": {
-                factory = new ApiServiceFactory(httpClient, objectMapper, config.getBaseURL(), httpFactory);
+                factory = new ApiServiceFactory(objectMapper,
+                        config.getBaseURL(), httpJsonFacade);
                 break;
             }
             case "file": {
-                factory = new FileServiceFactory(httpClient, objectMapper,
-                        config.getBaseURL(), config.getFilePath(), httpFactory);
+                factory = new FileServiceFactory(objectMapper,
+                        config.getBaseURL(), config.getFilePath(), httpJsonFacade);
                 break;
             }
-            default: factory = new MemoryServiceFactory(httpClient, objectMapper, config.getBaseURL(), httpFactory);
+            case "database": {
+                MyDataBase myDataBase = new MyDataBase(config.getDsn(), config.getUser(), config.getPas());
+                myDataBase.createDataSource();
+                myDataBase.createTables();
+                factory = new DataBaseServiceFactory(myDataBase);
+                break;
+            }
+            default:
+                factory = new MemoryServiceFactory(objectMapper, config.getBaseURL(), httpJsonFacade);
         }
 
         UserService us = factory.createUserService();

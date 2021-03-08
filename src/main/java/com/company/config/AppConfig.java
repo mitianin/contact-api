@@ -13,5 +13,11 @@ public class AppConfig {
     private String baseURL;
     @MyConfigAnnotation("file.path")
     private String filePath;
+    @MyConfigAnnotation("db.dsn")
+    private String dsn;
+    @MyConfigAnnotation("db.user")
+    private String user;
+    @MyConfigAnnotation("db.pas")
+    private String pas;
 
 }

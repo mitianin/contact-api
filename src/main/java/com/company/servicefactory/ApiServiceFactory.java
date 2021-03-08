@@ -1,6 +1,6 @@
 package com.company.servicefactory;
 
-import com.company.httpfacade.HttpJsonFacade;
+import com.company.util.HttpJsonFacade;
 import com.company.httpfactory.HttpFactory;
 import com.company.service.ContactService;
 import com.company.service.ContactServiceApi;
@@ -13,18 +13,17 @@ import java.net.http.HttpClient;
 
 @RequiredArgsConstructor
 public class ApiServiceFactory implements ServiceFactory {
-    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
     private final String baseUri;
-    private final HttpFactory httpFactory;
+    private final HttpJsonFacade httpJsonFacade;
 
     @Override
     public ContactService createContactService() {
-        return new ContactServiceApi(httpClient, objectMapper, baseUri, httpFactory);
+        return new ContactServiceApi(objectMapper, baseUri, httpJsonFacade);
     }
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(objectMapper, baseUri, new HttpJsonFacade(httpFactory, objectMapper, httpClient));
+        return new UserServiceApi(objectMapper, baseUri, httpJsonFacade);
     }
 }

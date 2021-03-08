@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import com.company.service.UserServiceApi;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 @Data

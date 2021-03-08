@@ -4,6 +4,7 @@ import com.company.dto.LoginResponse;
 import com.company.dto.RegisterResponse;
 import com.company.dto.User;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
