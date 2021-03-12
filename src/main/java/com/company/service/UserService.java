@@ -9,7 +9,14 @@ import java.util.List;
 
 public interface UserService {
     List<User> getAll();
+
     LoginResponse login(String login, String password);
+
     List<User> getAllWithLogin(String token);
+
     RegisterResponse register(String login, String password, String dateBorn);
+
+    default String getToken() {
+        return null;
+    }
 }

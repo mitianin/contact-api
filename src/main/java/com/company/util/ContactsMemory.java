@@ -1,15 +1,15 @@
 package com.company.util;
 
 import com.company.dto.FindContact;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class ContactsMemory {
-    public static int id = 0;
-    public static List<FindContact> memoryContacts = new ArrayList<>();
+    public int id = 0;
+    public List<FindContact> memoryContacts = new ArrayList<>();
 }

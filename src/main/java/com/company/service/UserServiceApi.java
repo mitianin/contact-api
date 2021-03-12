@@ -1,7 +1,7 @@
 package com.company.service;
 
 import com.company.util.HttpJsonFacade;
-import com.company.util.Token;
+import com.company.util.TokenData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.company.dto.*;
@@ -17,6 +17,7 @@ public class UserServiceApi implements UserService {
     private final ObjectMapper objectMapper;
     private final String baseUri;
     private final HttpJsonFacade facade;
+    private final TokenData tokenData;
 
     @Override
     public List<User> getAll() {
@@ -36,8 +37,8 @@ public class UserServiceApi implements UserService {
                     facade.post(baseUri + "/login", logData, LoginResponse.class);
 
             if (loginResponse.getToken() != null) {
-                Token.token = loginResponse.getToken();
-                Token.tokenDate = new Date();
+                tokenData.setToken(loginResponse.getToken());
+                tokenData.setTokenDate(new Date());
             }
             return loginResponse;
         } catch (JsonProcessingException e) {

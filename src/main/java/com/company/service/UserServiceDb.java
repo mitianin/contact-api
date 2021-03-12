@@ -5,9 +5,9 @@ import com.company.dto.RegisterResponse;
 import com.company.dto.User;
 import com.company.exceptions.InvalidLoginDataException;
 import com.company.exceptions.UserAlreadyExistsExceptions;
-import com.company.util.CurrentUserData;
-import com.company.util.MyDataBase;
-import com.company.util.Token;
+import com.company.util.db.CurrentUserData;
+import com.company.util.db.MyDataBase;
+import com.company.util.TokenData;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.*;
@@ -18,6 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceDb implements UserService {
     private final MyDataBase mdb;
+    private final CurrentUserData currentUserData;
+    private final TokenData tokenData;
+
     private final List<User> users = new ArrayList<>();
 
     @Override
@@ -63,12 +66,12 @@ public class UserServiceDb implements UserService {
             ps.setString(1, login);
             rs = ps.executeQuery();
             rs.next();
-            CurrentUserData.id = rs.getInt("id");
-            System.out.println(CurrentUserData.id);
+
+            currentUserData.setId(rs.getInt("id"));
 
             loginResponse.setStatus("ok");
-            Token.token = " ";
-            Token.tokenDate = new Date();
+            tokenData.setToken("");
+            tokenData.setTokenDate(new Date());
 
             return loginResponse;
 

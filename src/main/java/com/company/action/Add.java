@@ -1,7 +1,7 @@
 package com.company.action;
 
 import com.company.service.ContactService;
-import com.company.util.Token;
+import com.company.util.TokenData;
 import lombok.AllArgsConstructor;
 
 import java.util.Scanner;
@@ -19,7 +19,7 @@ public class Add implements Action {
         String value = s.nextLine();
         String name = s.nextLine();
 
-        return String.valueOf(contactService.add(type, value, name, Token.getToken()));
+        return String.valueOf(contactService.add(type, value, name, contactService.getToken()));
     }
     @Override
     public boolean needToken() {

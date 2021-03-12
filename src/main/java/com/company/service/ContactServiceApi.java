@@ -3,6 +3,7 @@ package com.company.service;
 import com.company.dto.AddRequest;
 import com.company.dto.AddResponse;
 import com.company.util.HttpJsonFacade;
+import com.company.util.TokenData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.company.dto.FindContact;
 import com.company.dto.FindResponse;
@@ -20,6 +21,7 @@ public class ContactServiceApi implements ContactService {
     private final ObjectMapper objectMapper;
     private final String baseUrl;
     private HttpJsonFacade httpJsonFacade;
+    private final TokenData tokenData;
 
     @Override
     public List<FindContact> findAllContacts(String token) {
@@ -82,5 +84,10 @@ public class ContactServiceApi implements ContactService {
         }
 
         return addResponse != null;
+    }
+
+    @Override
+    public String getToken() {
+        return tokenData.getToken();
     }
 }

@@ -1,7 +1,7 @@
 package com.company.action;
 
 import com.company.service.ContactService;
-import com.company.util.Token;
+import com.company.util.TokenData;
 import lombok.Data;
 
 import java.util.Scanner;
@@ -14,7 +14,7 @@ public class FindByName implements Action {
     @Override
     public String doIt() {
         System.out.println("ENTER NAME TO FIND");
-        return contactService.findByName(s.nextLine(), Token.getToken()).toString();
+        return contactService.findByName(s.nextLine(), contactService.getToken()).toString();
     }
 
     @Override

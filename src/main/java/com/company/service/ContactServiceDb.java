@@ -1,8 +1,8 @@
 package com.company.service;
 
 import com.company.dto.FindContact;
-import com.company.util.CurrentUserData;
-import com.company.util.MyDataBase;
+import com.company.util.db.CurrentUserData;
+import com.company.util.db.MyDataBase;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Connection;
@@ -15,6 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContactServiceDb implements ContactService {
     private final MyDataBase mdb;
+    private final CurrentUserData currentUserData;
+
     private final List<FindContact> contacts = new ArrayList<>();
 
     @Override
@@ -25,7 +27,7 @@ public class ContactServiceDb implements ContactService {
 
             PreparedStatement ps = connection.prepareStatement("select id, name, value, type " +
                     "from contacts where user_id = ?");
-            ps.setInt(1, CurrentUserData.id);
+            ps.setInt(1, currentUserData.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 FindContact fc = new FindContact();
@@ -102,7 +104,7 @@ public class ContactServiceDb implements ContactService {
             ps.setString(1, name);
             ps.setString(2, value);
             ps.setString(3, type);
-            ps.setInt(4, CurrentUserData.id);
+            ps.setInt(4, currentUserData.getId());
             ps.execute();
 
         } catch (SQLException throwables) {

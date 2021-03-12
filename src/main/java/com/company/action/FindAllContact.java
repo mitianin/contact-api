@@ -1,7 +1,7 @@
 package com.company.action;
 
 import com.company.service.ContactService;
-import com.company.util.Token;
+import com.company.util.TokenData;
 import lombok.Data;
 
 @Data
@@ -10,7 +10,7 @@ public class FindAllContact implements Action {
 
     @Override
     public String doIt() {
-        return contactService.findAllContacts(Token.getToken()).toString();
+        return contactService.findAllContacts(contactService.getToken()).toString();
     }
 
     @Override

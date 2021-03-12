@@ -6,6 +6,7 @@ import com.company.service.ContactService;
 import com.company.service.ContactServiceFile;
 import com.company.service.UserService;
 import com.company.service.UserServiceApi;
+import com.company.util.TokenData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 
@@ -17,14 +18,15 @@ public class FileServiceFactory implements ServiceFactory {
     private final String baseUri;
     private final String filePath;
     private final HttpJsonFacade httpJsonFacade;
+    private final TokenData tokenData;
 
     @Override
     public ContactService createContactService() {
-        return new ContactServiceFile(objectMapper, filePath);
+        return new ContactServiceFile(objectMapper, filePath, tokenData);
     }
 
     @Override
     public UserService createUserService() {
-        return new UserServiceApi(objectMapper, baseUri, httpJsonFacade);
+        return new UserServiceApi(objectMapper, baseUri, httpJsonFacade, tokenData);
     }
 }

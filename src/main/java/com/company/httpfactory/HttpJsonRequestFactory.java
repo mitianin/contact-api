@@ -1,11 +1,14 @@
 package com.company.httpfactory;
 
-import com.company.util.Token;
+import com.company.util.TokenData;
+import lombok.RequiredArgsConstructor;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 
+@RequiredArgsConstructor
 public class HttpJsonRequestFactory implements HttpFactory {
+    private final TokenData tokenData;
 
     @Override
     public HttpRequest getRequestWithToken(String url) {
@@ -13,7 +16,7 @@ public class HttpJsonRequestFactory implements HttpFactory {
                 uri(URI.create(url))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + Token.getToken())
+                .header("Authorization", "Bearer " + tokenData.getToken())
                 .GET()
                 .build();
     }
@@ -44,7 +47,7 @@ public class HttpJsonRequestFactory implements HttpFactory {
                 uri(URI.create(url))
                 .header("Accept", "application/json")
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + Token.getToken())
+                .header("Authorization", "Bearer " + tokenData.getToken())
                 .POST(HttpRequest.BodyPublishers.ofString((String) obj))
                 .build();
     }

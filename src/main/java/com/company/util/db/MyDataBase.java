@@ -1,8 +1,5 @@
-package com.company.util;
+package com.company.util.db;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,28 +10,7 @@ import java.sql.*;
 @Getter
 public class MyDataBase {
 
-    private final String dsn;
-    private final String user;
-    private final String pas;
-
-    private DataSource ds = null;
-
-    public static void main(String[] args) {
-
-    }
-
-    public void createDataSource() {
-
-        if (ds == null) {
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(dsn);
-            config.setUsername(user);
-            config.setPassword(pas);
-            config.setMaximumPoolSize(8);
-            config.setMinimumIdle(4);
-            ds = new HikariDataSource(config);
-        }
-    }
+    private final DataSource ds;
 
     public void createTables() {
         createUserTable();
